@@ -29,12 +29,13 @@ def main():
     parser.add_argument("--pretrained", default=None, help="path to pre-trained model")
     parser.add_argument("--no-date", action="store_true", help="don't append date timestamp to folder")
     parser.add_argument("--milestones", default=[100, 150, 200], nargs="*", help="epochs at which learning rate is divided by 2")
+    parser.add_argument("--save-dir", default="saved_models", help="directory to save the trained models")
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     # 결과를 저장할 폴더 생성
-    save_path = "result"
+    save_path = args.save_dir
     if not os.path.exists(save_path):
         os.makedirs(save_path, exist_ok=True)
     
@@ -88,7 +89,7 @@ def main():
 
         is_best = val_loss < best_loss
         best_loss = min(val_loss, best_loss)
-
+    
         save_checkpoint({
             'epoch': epoch + 1,
             'state_dict': model.state_dict(),
