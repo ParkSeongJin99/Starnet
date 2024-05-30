@@ -117,7 +117,7 @@ def train(train_loader, model, optimizer, epoch, writer, device, print_freq):
         if i % print_freq == 0:
             print(f"Epoch: [{epoch}][{i}/{len(train_loader)}]\t"
                   f"Loss {losses.val:.4f} ({losses.avg:.4f})")
-
+            loss_train=losses.val
     return losses.avg
 
 def validate(val_loader, model, epoch, writer, device, print_freq):
@@ -133,11 +133,11 @@ def validate(val_loader, model, epoch, writer, device, print_freq):
             loss = F.mse_loss(output, target)
 
             losses.update(loss.item(), images.size(0))
-
+            
             if i % print_freq == 0:
                 print(f"Test: [{i}/{len(val_loader)}]\t"
                       f"Loss {losses.val:.4f} ({losses.avg:.4f})")
-
+                loss_val=losses.val
     print(f" * Loss {losses.avg:.4f}")
 
     return losses.avg
