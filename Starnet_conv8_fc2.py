@@ -8,6 +8,7 @@ class StarNet(nn.Module):
         self.conv1 = nn.Conv2d(2, 32, kernel_size=5, stride=1, padding=2)
         self.conv2 = nn.Conv2d(32, 64, kernel_size=5, stride=2, padding=2)
         self.conv6 = nn.Conv2d(64, 128, kernel_size=5, stride=2, padding=2)
+        self.conv6_1 = nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1)
         self.conv6_2 = nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1)
         self.conv6_3 = nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1)
         self.conv6_4 = nn.Conv2d(256, 512, kernel_size=3, stride=2, padding=1)
