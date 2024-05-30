@@ -22,7 +22,6 @@ class StarNet(nn.Module):
         x = F.relu(self.conv1(x))
         x = F.relu(self.conv2(x))
         x = F.relu(self.conv6(x))
-        x = F.relu(self.conv6_1(x))
         x = F.relu(self.conv6_2(x))
         x = F.relu(self.conv6_3(x))
         x = F.relu(self.conv6_4(x))
