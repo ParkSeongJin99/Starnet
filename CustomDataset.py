@@ -7,24 +7,24 @@ class CustomDataset(Dataset):
     def __init__(self, root_dir, transform=None):
         self.root_dir = root_dir
         self.transform = transform
-        self.image_pairs = []
+        self.image_paths = []
         self.labels = []
+        for filename in os.listdir(root_dir):
+            if filename.endswith('.txt'):
+                with open(os.path.join(root_dir, filename), 'r') as f:
+                    label = f.readline().strip()
+                    try:
+                        label = float(label)
+                    except ValueError:
+                        print(f"Error converting label to float in file: {filename}")
+                        continue
+                    image_path = os.path.join(root_dir, filename.replace('.txt', '.png'))
+                    if os.path.exists(image_path):
+                        self.image_paths.append(image_path)
+                        self.labels.append(label)
+                    else:
+                        print(f"Image file not found for label: {filename}")
 
-        image_dir = os.path.join(root_dir, 'images')
-        label_dir = os.path.join(root_dir, 'labels')
-
-        for label_file in os.listdir(label_dir):
-            label_path = os.path.join(label_dir, label_file)
-            with open(label_path, 'r') as f:
-                label = float(f.readline().strip())
-
-            image_base_name = label_file.replace('.txt', '')
-            img1_path = os.path.join(image_dir, image_base_name + '_1.png')
-            img2_path = os.path.join(image_dir, image_base_name + '_2.png')
-
-            if os.path.exists(img1_path) and os.path.exists(img2_path):
-                self.image_pairs.append((img1_path, img2_path))
-                self.labels.append(label)
 
     def __len__(self):
         return len(self.image_pairs)
