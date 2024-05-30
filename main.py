@@ -77,7 +77,7 @@ def main():
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=args.milestones, gamma=0.5)
 
     best_loss = float('inf')
-
+    
     for epoch in range(args.start_epoch, args.epochs):
         train_loss = train(train_loader, model, optimizer, epoch, train_writer, device, args.print_freq)
         val_loss = validate(val_loader, model, epoch, val_writer, device, args.print_freq)
@@ -89,13 +89,19 @@ def main():
 
         is_best = val_loss < best_loss
         best_loss = min(val_loss, best_loss)
-    
+
         save_checkpoint({
             'epoch': epoch + 1,
             'state_dict': model.state_dict(),
             'best_loss': best_loss,
             'optimizer': optimizer.state_dict(),
         }, is_best, save_path)
+
+        # Train loss가 0.05 미만이면 훈련 중단
+        if train_loss < 0.05:
+            print("Train loss가 0.05 미만으로 수렴하여 훈련을 중단합니다.")
+            break
+
 
 def train(train_loader, model, optimizer, epoch, writer, device, print_freq):
     model.train()
