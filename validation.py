@@ -1,16 +1,18 @@
 import os
 import torch
 import argparse
+import matplotlib.pyplot as plt
+import numpy as np
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from CustomDataset import CustomDataset  # CustomDataset.py의 CustomDataset 클래스를 import합니다.
-from Starnet import StarNet  # Starnet.py의 StarNet 클래스를 import합니다.
+from Starnet_conv8_fc2 import StarNet  # Starnet.py의 StarNet 클래스를 import합니다.
 
 def main():
     parser = argparse.ArgumentParser(description="PyTorch StarNet Validation")
     
     parser.add_argument("model", help="directory to load the trained models")
-    parser.add_argument("--datapath", metavar="DIR", default="Validation"  ,help="path to dataset")
+    parser.add_argument("--datapath", metavar="DIR", default="Validation", help="path to dataset")
     args = parser.parse_args()
 
     # 이미지 데이터셋이 있는 폴더 경로를 지정합니다.
@@ -33,6 +35,10 @@ def main():
     model.eval()
     
     # 각 이미지에 대한 결과값을 계산하고 출력합니다.
+    all_outputs = []
+    all_labels = []
+    all_percent_errors = []
+    
     for images, labels in data_loader:
         images = images.to(device)
         labels = labels.to(device)
@@ -42,11 +48,48 @@ def main():
         error = output - label
         percent_error = (error / label) * 100 if label != 0 else float('inf')
         
-        print(f"Output: {output:.2f}, Label: {label:.2f}, Error: {error:.2f}, Percent Error: {percent_error:.2f}%")
+        all_outputs.append(output)
+        all_labels.append(label)
+        all_percent_errors.append(percent_error)
+        
+        print(f"Output: {output:.2f} deg/s, Label: {label:.2f} deg/s, Error: {error:.2f} deg/s, Percent Error: {percent_error:.2f}%")
     
-    # 이미지 셋 이름을 출력합니다.
-    image_set_names = [img_set for img_set, _, _ in dataset.image_list]
-    print("Image Set Names:", image_set_names)
+    # 평균 절대 오차 (MAE) 및 루트 평균 제곱 오차 (RMSE) 계산
+    mae = np.mean(np.abs(np.array(all_outputs) - np.array(all_labels)))
+    rmse = np.sqrt(np.mean((np.array(all_outputs) - np.array(all_labels)) ** 2))
+    
+    # 결과를 표로 출력
+    print("\nEvaluation Metrics:")
+    print(f"{'Metric':<20} {'Value':<20}")
+    print(f"{'-'*40}")
+    print(f"{'Mean Absolute Error (MAE)':<20} {mae:<20.4f} deg/s")
+    print(f"{'Root Mean Squared Error (RMSE)':<20} {rmse:<20.4f} deg/s")
+    
+    # 회귀 그래프를 그립니다.
+    plt.figure(figsize=(12, 6))
+    
+    # 첫 번째 그래프: 실제 레이블과 예측값의 회귀 그래프
+    plt.subplot(1, 2, 1)
+    plt.scatter(all_labels, all_outputs, color='blue', label='Predicted vs Actual')
+    plt.plot([min(all_labels), max(all_labels)], [min(all_labels), max(all_labels)], color='red', linestyle='--', label='Ideal')
+    plt.xlabel('Actual Labels (deg/s)')
+    plt.ylabel('Predicted Outputs (deg/s)')
+    plt.title('Regression Graph')
+    plt.legend()
+    plt.grid(True)
+    
+    # 두 번째 그래프: 실제 레이블과 퍼센트 에러 그래프
+    plt.subplot(1, 2, 2)
+    plt.scatter(all_labels, all_percent_errors, color='green', label='Percent Error vs Actual')
+    plt.axhline(y=0, color='red', linestyle='--', label='Zero Error Line')
+    plt.xlabel('Actual Labels (deg/s)')
+    plt.ylabel('Percent Error (%)')
+    plt.title('Percent Error Graph')
+    plt.legend()
+    plt.grid(True)
+    
+    plt.suptitle('Angular Velocity Prediction Analysis')
+    plt.show()
 
 if __name__ == "__main__":
     main()
