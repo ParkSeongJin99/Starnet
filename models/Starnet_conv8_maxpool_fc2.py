@@ -14,7 +14,7 @@ class StarNet(nn.Module):
         self.conv6_4 = nn.Conv2d(256, 512, kernel_size=3, stride=2, padding=1)
         self.conv6_5 = nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1)
         
-        self.global_avg_pool = nn.AdaptiveMaxPool2d((1, 1))
+        self.global_max_pool = nn.AdaptiveMaxPool2d((1, 1))
         self.fc1 = nn.Linear(512, 128)
         self.fc2 = nn.Linear(128, 1)
 
@@ -29,7 +29,7 @@ class StarNet(nn.Module):
         x = F.relu(self.conv6_4(x))
         x = F.relu(self.conv6_5(x))
 
-        x = self.global_avg_pool(x)
+        x = self.global_max_pool(x)
         x = x.view(x.size(0), -1)
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
