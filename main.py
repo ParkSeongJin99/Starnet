@@ -9,7 +9,8 @@ from torchvision import transforms
 from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 from CustomDataset import CustomDataset
-from Starnet import StarNet 
+import models
+from models import Starnet
 
 def main():
     parser = argparse.ArgumentParser(description="PyTorch StarNet Training")
