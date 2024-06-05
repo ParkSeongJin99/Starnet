@@ -9,7 +9,7 @@ from torchvision import transforms
 from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 from CustomDataset import CustomDataset
-from models.Starnet_conv8_fc3 import StarNet  # Starnet.py의 StarNet 클래스를 import합니다.
+from models.Starnet_conv8_maxpool_fc2 import StarNet  # Starnet.py의 StarNet 클래스를 import합니다.
 
 def main():
     parser = argparse.ArgumentParser(description="PyTorch StarNet Training")
