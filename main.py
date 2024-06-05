@@ -98,8 +98,8 @@ def main():
         }, is_best, save_path)
 
         # Train loss가 0.05 미만이면 훈련 중단
-        if train_loss < 0.05:
-            print("Train loss가 0.05 미만으로 수렴하여 훈련을 중단합니다.")
+        if train_loss < 0.01:
+            print("Train loss가 0.01 미만으로 수렴하여 훈련을 중단합니다.")
             break
 
 
