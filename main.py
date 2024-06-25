@@ -30,7 +30,7 @@ def main():
     parser.add_argument("--no-date", action="store_true", help="don't append date timestamp to folder")
     parser.add_argument("--milestones", default=[100, 150, 200], nargs="*", help="epochs at which learning rate is divided by 2")
     parser.add_argument("--save-dir", default="saved_models", help="directory to save the trained models")
-    parser.add_argument("--patience", default=10, type=int, help="number of epochs to wait for improvement before stopping")
+    parser.add_argument("--patience", default=20, type=int, help="number of epochs to wait for improvement before stopping")
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
