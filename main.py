@@ -30,6 +30,7 @@ def main():
     parser.add_argument("--no-date", action="store_true", help="don't append date timestamp to folder")
     parser.add_argument("--milestones", default=[100, 150, 200], nargs="*", help="epochs at which learning rate is divided by 2")
     parser.add_argument("--save-dir", default="saved_models", help="directory to save the trained models")
+    parser.add_argument("--patience", default=10, type=int, help="number of epochs to wait for improvement before stopping")
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -77,7 +78,8 @@ def main():
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=args.milestones, gamma=0.5)
 
     best_loss = float('inf')
-    
+    epochs_no_improve = 0
+
     for epoch in range(args.start_epoch, args.epochs):
         train_loss = train(train_loader, model, optimizer, epoch, train_writer, device, args.print_freq)
         val_loss = validate(val_loader, model, epoch, val_writer, device, args.print_freq)
@@ -88,7 +90,12 @@ def main():
         val_writer.add_scalar("Loss/val", val_loss, epoch)
 
         is_best = val_loss < best_loss
-        best_loss = min(val_loss, best_loss)
+
+        if is_best:
+            best_loss = val_loss
+            epochs_no_improve = 0
+        else:
+            epochs_no_improve += 1
 
         save_checkpoint({
             'epoch': epoch + 1,
@@ -97,9 +104,8 @@ def main():
             'optimizer': optimizer.state_dict(),
         }, is_best, save_path)
 
-        # Train loss가 0.05 미만이면 훈련 중단
-        if train_loss < 0.01:
-            print("Train loss가 0.01 미만으로 수렴하여 훈련을 중단합니다.")
+        if epochs_no_improve >= args.patience:
+            print("Validation loss did not improve for {} epochs. Stopping training.".format(args.patience))
             break
 
 
@@ -123,7 +129,7 @@ def train(train_loader, model, optimizer, epoch, writer, device, print_freq):
         if i % print_freq == 0:
             print(f"Epoch: [{epoch}][{i}/{len(train_loader)}]\t"
                   f"Loss {losses.val:.4f} ({losses.avg:.4f})")
-            loss_train=losses.val
+            loss_train = losses.val
     return losses.avg
 
 def validate(val_loader, model, epoch, writer, device, print_freq):
@@ -143,7 +149,7 @@ def validate(val_loader, model, epoch, writer, device, print_freq):
             if i % print_freq == 0:
                 print(f"Test: [{i}/{len(val_loader)}]\t"
                       f"Loss {losses.val:.4f} ({losses.avg:.4f})")
-                loss_val=losses.val
+                loss_val = losses.val
     print(f" * Loss {losses.avg:.4f}")
 
     return losses.avg
