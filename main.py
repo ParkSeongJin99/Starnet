@@ -4,12 +4,12 @@ import datetime
 import torch
 import torch.nn.functional as F
 import torch.optim
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, random_split
 from torchvision import transforms
 from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 from CustomDataset import CustomDataset
-from models.Starnet_conv8_maxpool_fc2 import StarNet  # Starnet.py의 StarNet 클래스를 import합니다.
+from models.Starnet_conv4_maxpool_fc2 import StarNet  # Starnet.py의 StarNet 클래스를 import합니다.
 
 def main():
     parser = argparse.ArgumentParser(description="PyTorch StarNet Training")
@@ -31,6 +31,7 @@ def main():
     parser.add_argument("--milestones", default=[100, 150, 200], nargs="*", help="epochs at which learning rate is divided by 2")
     parser.add_argument("--save-dir", default="saved_models", help="directory to save the trained models")
     parser.add_argument("--patience", default=20, type=int, help="number of epochs to wait for improvement before stopping")
+    parser.add_argument("--val-split", default=0.1, type=float, help="proportion of the dataset to include in the validation split")
     args = parser.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -49,15 +50,19 @@ def main():
         transforms.Normalize(mean=[0.5], std=[0.5])
     ])
 
-    train_dataset = CustomDataset(root_dir=os.path.join(args.data, 'train'), transform=train_transform)
+    full_dataset = CustomDataset(root_dir=args.data, transform=train_transform)
+    
+    val_size = int(len(full_dataset) * args.val_split)
+    train_size = len(full_dataset) - val_size
+    
+    train_dataset, val_dataset = random_split(full_dataset, [train_size, val_size])
+    
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers)
-
-    val_dataset = CustomDataset(root_dir=os.path.join(args.data, 'val'), transform=train_transform)
     val_loader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.workers)
 
     # 훈련 및 검증 데이터의 개수 출력
     print(f"Train 데이터 수: {len(train_dataset)}")
-    print(f"Test 데이터 수: {len(val_dataset)}")
+    print(f"Val 데이터 수: {len(val_dataset)}")
     
     # 훈련 시작 메시지 출력
     print("훈련 시작")
