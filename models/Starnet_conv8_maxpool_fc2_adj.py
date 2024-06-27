@@ -20,14 +20,14 @@ class StarNet(nn.Module):
 
     
     def forward(self, x):
-        x = self.conv1(x)
-        x = self.conv2(x)
-        x = self.conv6(x)
-        x = self.conv6_1(x)
-        x = self.conv6_2(x)
-        x = self.conv6_3(x)
-        x = self.conv6_4(x)
-        x = self.conv6_5(x)
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv6(x))
+        x = F.relu(self.conv6_1(x))
+        x = F.relu(self.conv6_2(x))
+        x = F.relu(self.conv6_3(x))
+        x = F.relu(self.conv6_4(x))
+        x = F.relu(self.conv6_5(x))
 
         x = self.global_max_pool(x)
         x = x.view(x.size(0), -1)
