@@ -6,7 +6,7 @@ import numpy as np
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from CustomDataset import CustomDataset  # CustomDataset.py의 CustomDataset 클래스를 import합니다.
-from models.Starnet_conv8_maxpool_fc4 import StarNet  # Starnet.py의 StarNet 클래스를 import합니다.
+from models.Starnet_conv8_maxpool_fc2 import StarNet  # Starnet.py의 StarNet 클래스를 import합니다.
 
 def main():
     parser = argparse.ArgumentParser(description="PyTorch StarNet Validation")
