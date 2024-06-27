@@ -54,13 +54,6 @@ class CustomDataset(Dataset):
                 print(f"Error applying transform to images at paths: '{img1_path}', '{img2_path}'. Error: {e}")
                 raise
 
-        # Make the pixel values of the second image negative
-        try:
-            img2 = torch.neg(img2)
-        except Exception as e:
-            print(f"Error making pixel values negative for image at path: '{img2_path}'. Error: {e}")
-            raise
-
         try:
             image_pair = torch.cat((img1, img2), dim=0)
         except Exception as e:
