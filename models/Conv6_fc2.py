@@ -12,7 +12,7 @@ class StarNet(nn.Module):
         self.conv5 = nn.Conv2d(128, 256, kernel_size=3, stride=2, padding=1)
         self.conv6 = nn.Conv2d(256, 512, kernel_size=3, stride=2, padding=1)
         
-        self.fc1 = nn.Linear(512 * 8 * 8, 256)
+        self.fc1 = nn.Linear(512 * 4 * 4, 256)
         self.fc2 = nn.Linear(256, 1)
 
     def forward(self, x):
