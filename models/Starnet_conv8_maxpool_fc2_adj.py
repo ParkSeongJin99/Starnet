@@ -21,7 +21,9 @@ class StarNet(nn.Module):
     
     def forward(self, x):
         x = F.relu(self.conv1(x))
+        print(f"Conv1 size: {torch.tensor.size(x)}")
         x = F.relu(self.conv2(x))
+        print(f"Conv1 size: {torch.tensor.size(x)}")
         x = F.relu(self.conv6(x))
         x = F.relu(self.conv6_1(x))
         x = F.relu(self.conv6_2(x))

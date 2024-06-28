@@ -28,8 +28,11 @@ class StarNet(nn.Module):
         x = F.leaky_relu(self.conv6_3(x))
         x = F.leaky_relu(self.conv6_4(x))
         x = F.leaky_relu(self.conv6_5(x))
-
+        print(f"Pooling 전 tensor 정보: {torch.Tensor.size(x)}")
+        channel_data = x[0, 0, :, 0].cpu().detach().numpy()
+        print(f"Pooling 전 channel 0 데이터 (matrix format):\n{channel_data}")
         x = self.global_max_pool(x)
+        print(f"Pooling 후 tensor 정보: {torch.Tensor.size(x)}")
         x = x.view(x.size(0), -1)
         x = F.leaky_relu(self.fc1(x))
         x = self.fc2(x)
