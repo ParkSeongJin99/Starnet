@@ -14,16 +14,16 @@ class StarNet(nn.Module):
         self.conv6_4 = nn.Conv2d(256, 512, kernel_size=3, stride=2, padding=1)
         self.conv6_5 = nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1)
         
-        self.global_max_pool = nn.AdaptiveMaxPool2d((1, 1))
-        self.fc1 = nn.Linear(512, 256)
+        #self.global_max_pool = nn.AdaptiveMaxPool2d((1, 1))
+        self.fc1 = nn.Linear(512*16*16, 256)
         self.fc2 = nn.Linear(256, 1)
 
     
     def forward(self, x):
         x = F.relu(self.conv1(x))
-        print(f"Conv1 size: {torch.tensor.size(x)}")
+        
         x = F.relu(self.conv2(x))
-        print(f"Conv1 size: {torch.tensor.size(x)}")
+        
         x = F.relu(self.conv6(x))
         x = F.relu(self.conv6_1(x))
         x = F.relu(self.conv6_2(x))

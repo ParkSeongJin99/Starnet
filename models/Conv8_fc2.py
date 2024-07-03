@@ -34,22 +34,22 @@ class StarNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(512, 512, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
+            # nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            # nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
             
             # Block 5
-            nn.Conv2d(512, 512, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=2, stride=2),
+            # nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            # nn.ReLU(inplace=True),
+            # nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            # nn.ReLU(inplace=True),
+            # nn.Conv2d(512, 512, kernel_size=3, padding=1),
+            # nn.ReLU(inplace=True),
+            # nn.MaxPool2d(kernel_size=2, stride=2),
         )
         
         self.classifier = nn.Sequential(
-            nn.Linear(512 * 8 * 8, 4096)
+            nn.Linear(512 * 16 * 16, 4096)
             nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(4096, 4096),
