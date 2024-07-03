@@ -45,7 +45,7 @@ def main():
     val_writer = SummaryWriter(os.path.join(save_path, "val"))
     
     train_transform = transforms.Compose([
-        transforms.Resize((256, 256)),
+        transforms.Resize((1280, 1024)),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.5], std=[0.5])
     ])
