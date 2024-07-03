@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class StarNetVGG16(nn.Module):
+class StarNet(nn.Module):
     def __init__(self):
-        super(StarNetVGG16, self).__init__()
+        super(StarNet, self).__init__()
         self.features = nn.Sequential(
             # Block 1
             nn.Conv2d(2, 64, kernel_size=3, padding=1),
