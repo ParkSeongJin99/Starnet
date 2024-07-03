@@ -6,13 +6,14 @@ import numpy as np
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from CustomDataset import CustomDataset  # CustomDataset.py의 CustomDataset 클래스를 import합니다.
-from models.Starnet_conv8_maxpool_fc2_activX import StarNet  # Starnet.py의 StarNet 클래스를 import합니다.
+from models.Conv6_fc2 import StarNet  # Starnet.py의 StarNet 클래스를 import합니다.
 
 def main():
     parser = argparse.ArgumentParser(description="PyTorch StarNet Validation")
     
     parser.add_argument("model", help="model_name")
     parser.add_argument("--datapath", metavar="DIR", default="Validation", help="path to dataset")
+    parser.add_argument("--txtpath", metavar="DIR", default="Validation", help="path to dataset")
     parser.add_argument("--output", metavar="FILE", default="output.txt", help="path to output text file")
     parser.add_argument("--modelpath", help="directory to load the trained models")
     args = parser.parse_args()
@@ -20,13 +21,13 @@ def main():
     # 이미지 데이터셋이 있는 폴더 경로를 지정합니다.
     data_dir = args.datapath
     # 저장할 txt파일 이름을 모델 이름으로 변경합니다
-    args.output = os.path.join(args.datapath,args.model+'.txt')
+    args.output = os.path.join(args.txtpath,args.model+'.txt')
 
     
 
     # 데이터셋을 읽어오는 DataLoader를 설정합니다.
     transform = transforms.Compose([
-        transforms.Resize((256, 256)),
+        transforms.Resize((512, 512)),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.5], std=[0.5])
     ])
