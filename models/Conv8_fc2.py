@@ -26,11 +26,11 @@ class StarNet(nn.Module):
             nn.Conv2d(512, 512, kernel_size=3, stride=2, padding=1),
             nn.ReLU(inplace=True),
             nn.Conv2d(512, 1024, kernel_size=3, stride=2, padding=1),
-            
+            nn.ReLU(inplace=True)
         )
         
         self.classifier = nn.Sequential(
-            nn.Linear(512 * 10 * 8*2, 1024),
+            nn.Linear(1024 * 2 * 2, 1024),
             nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(1024, 1),  # Output for regression
