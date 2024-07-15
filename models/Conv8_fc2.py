@@ -13,11 +13,11 @@ class StarNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(128, 256, kernel_size=5, stride=2, padding=2),
             nn.ReLU(inplace=True),
-            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(256, 256, kernel_size=3, stride=2, padding=1),
             nn.ReLU(inplace=True),
             nn.Conv2d(256, 512, kernel_size=3, stride=2, padding=1),
             nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(512, 512, kernel_size=3, stride=2, padding=1),
             nn.ReLU(inplace=True),
             nn.Conv2d(512, 512, kernel_size=3, stride=2, padding=1),
             nn.ReLU(inplace=True),
@@ -25,9 +25,7 @@ class StarNet(nn.Module):
         )
         
         self.classifier = nn.Sequential(
-            nn.Linear(512 * 8 * 8, 1024),
-            nn.ReLU(inplace=True),
-            nn.Linear(1024, 256),
+            nn.Linear(512 * 2 * 2, 256),
             nn.ReLU(inplace=True),
             nn.Linear(256, 1),  # Output for regression
         )
