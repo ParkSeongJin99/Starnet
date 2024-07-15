@@ -32,7 +32,6 @@ class StarNet(nn.Module):
         self.classifier = nn.Sequential(
             nn.Linear(1024 * 2 * 2, 1024),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
             nn.Linear(1024, 1),  # Output for regression
         )
 
