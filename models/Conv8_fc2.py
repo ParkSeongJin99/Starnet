@@ -21,15 +21,13 @@ class StarNet(nn.Module):
             nn.ReLU(inplace=True),
             nn.Conv2d(512, 512, kernel_size=3, stride=2, padding=1),
             nn.ReLU(inplace=True),
-            nn.Conv2d(512, 512, kernel_size=3, stride=1, padding=1),
-            nn.ReLU(inplace=True),
             
         )
         
         self.classifier = nn.Sequential(
-            nn.Linear(512 * 8 * 8, 1024),
+            nn.Linear(512 * 8 * 8, 256),
             nn.ReLU(inplace=True),
-            nn.Linear(1024, 1),  # Output for regression
+            nn.Linear(256, 1),  # Output for regression
         )
 
     def forward(self, x):
