@@ -14,7 +14,7 @@ class StarNet(nn.Module):
         
 
         
-        self.fc1 = nn.Linear(512 * 8 * 8, 256)
+        self.fc1 = nn.Linear(512 * 9 * 9, 256)
         self.fc2 = nn.Linear(256, 1)
 
     def forward(self, x):
