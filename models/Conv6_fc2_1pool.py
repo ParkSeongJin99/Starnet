@@ -14,19 +14,18 @@ class StarNet(nn.Module):
         
 
         
-        self.fc1 = nn.Linear(512 * 2 * 2, 256)
+        self.fc1 = nn.Linear(512 * 8 * 8, 256)
         self.fc2 = nn.Linear(256, 1)
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
         
         x = F.relu(self.conv2(x))
-        x = F.max_pool2d(x, kernel_size=2, stride=2)
+        
         
         x = F.relu(self.conv3(x))
         x = F.relu(self.conv4(x))
         x = F.relu(self.conv5(x))
-        x = F.max_pool2d(x, kernel_size=2, stride=2)
         
         x = F.relu(self.conv6(x))
         x = F.max_pool2d(x, kernel_size=2, stride=2)
